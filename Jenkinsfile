@@ -1,8 +1,8 @@
 #!groovy
 def git_coomit_hash = ""
 def git_branch = ""
-def deploy_branch = "origin/cicd-example"
-def deploy_project = "app-development"
+def deploy_branch = "origin/pipeline-practice"
+def deploy_project = "meeting-development"
 def build_config_name = "django-psql-persistent"
 def app_image = "docker-registry.default.svc:5000/${deploy_project}/${build_config_name}"
 
