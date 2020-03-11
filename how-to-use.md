@@ -1,17 +1,17 @@
 # Getting started
 ## project作成
 OpenShiftのprojectを2つつくる。
-`app-development`がサンプルのアプリケーションが動作するprojectで、`app-devops`はJenkinsが動作するprojectである。
+`meeting-development`がサンプルのアプリケーションが動作するprojectで、`meeting-cicd`はJenkinsが動作するprojectである。
 アプリケーションが動作するために必要なリソースを確保しておくため、アプリケーションが動作するprojectと開発に必要なツールは分離しておくことをおすすめする。
 
 ```
-$ oc new-project app-development
-$ oc new-project app-devops
+$ oc new-project meeting-development
+$ oc new-project meeting-cicd
 ```
 
 ## Jenkins起動
 Jenkinsを起動する。Jenkinsは動作が重いため、必要に応じて`resource`を調整してください。
-また、Jenkinsはのちに`app-development`のリソースを操作するために権限を付与しておく。
+また、Jenkinsはのちに`meeting-development`のリソースを操作するために権限を付与しておく。
 
 ```
 $ oc new-app jenkins-persistent --param ENABLE_OAUTH=true --param MEMORY_LIMIT=2Gi --param VOLUME_CAPACITY=10Gi --param DISABLE_ADMINISTRATIVE_MONITORS=true
@@ -20,7 +20,7 @@ $ oc new-app jenkins-persistent --param ENABLE_OAUTH=true --param MEMORY_LIMIT=2
     Access your application via route 'jenkins-app-devops.apps.na311.openshift.opentlc.com'
     Run 'oc status' to view your app.
 
-$ oc policy add-role-to-user edit system:serviceaccount:app-devops:jenkins -n app-development
+$ oc policy add-role-to-user edit system:serviceaccount:meeting-cicd:jenkins -n meeting-development
 clusterrole.rbac.authorization.k8s.io/edit added: "system:serviceaccount:app-devops:jenkins"
 ```
 
@@ -35,7 +35,7 @@ $ oc process -f .openshift/templates/jenkins-slave-generic-template.yml \
     -p NAME=jenkins-slave-python \
     -p SOURCE_CONTEXT_DIR=jenkins-slaves/jenkins-slave-python \
     -p DOCKERFILE_PATH=Dockerfile \
-    | oc create -n app-devops -f -
+    | oc create -n meeting-cicd -f -
 imagestream.image.openshift.io/jenkins-slave-python created
 buildconfig.build.openshift.io/jenkins-slave-python created
 ```
